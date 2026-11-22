@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://kuwait-painter.pages.dev/sitemap.xml
