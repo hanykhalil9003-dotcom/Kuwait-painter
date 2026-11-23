@@ -1,35 +1,18 @@
-// تتبع التحويلات: استبدل AW_ID و CALL_LABEL و WA_LABEL بالقيم الفعلية من حساب Google Ads (Conversions)
-const AW_ID = 'AW-XXXXXXXXXX';
-const LABELS = {
-  call: 'CALL_LABEL',
-  whatsapp: 'WA_LABEL'
-};
+// دفع أحداث التتبع إلى Google Tag Manager (GTM)
+window.dataLayer = window.dataLayer || [];
 
 document.addEventListener('click', (e) => {
   const link = e.target.closest('[data-track]');
-  if (!link || typeof window.gtag !== 'function') return;
+  if (!link) return;
 
-  const trackType = link.dataset.track;
-  const label = LABELS[trackType];
-  if (!label) return;
+  const trackType = link.dataset.track; // 'call' أو 'whatsapp'
+  if (!trackType) return;
 
-  // تسجيل حدث تفاعل عام للتتبع والتحليل
-  window.gtag('event', 'contact_' + trackType, {
-    page_path: window.location.pathname,
-    transport_type: 'beacon'
+  window.dataLayer.push({
+    event: 'lead_click',
+    track_type: trackType,
+    page_path: window.location.pathname
   });
-
-  // إرسال التحويل إلى Google Ads فقط بعد استبدال المعرّفات الافتراضية
-  if (
-    AW_ID !== 'AW-XXXXXXXXXX' &&
-    label !== 'CALL_LABEL' &&
-    label !== 'WA_LABEL'
-  ) {
-    window.gtag('event', 'conversion', {
-      send_to: `${AW_ID}/${label}`,
-      transport_type: 'beacon'
-    });
-  }
 });
 
 // تحديث سنة حقوق النشر تلقائياً في الفوتر
